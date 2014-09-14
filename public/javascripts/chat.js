@@ -14,7 +14,7 @@ $(document).ready(function(){
 
     server.on('message', function(data){
        console.log('data : '+ data);
-        $('#history').append(data.nickname +' -> '+ data.msg +"<br/>");
+        $('#history').append('<span style="color: '+data.color+'">' + data.nickname +'</span> -> '+ data.msg +"<br/>");
     });
 
     $('#send').on('click',function(event){
