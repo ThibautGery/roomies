@@ -7,9 +7,14 @@ $(document).ready(function(){
     }
     var server = io();
 
+    server.on('connect', function(data){
+        var nickName = prompt('What is your nickname','anonymous');
+        server.emit('join', nickName);
+    });
+
     server.on('message', function(data){
        console.log('data : '+ data);
-        $('#history').append(data+"<br/>");
+        $('#history').append(data.nickname +' -> '+ data.msg +"<br/>");
     });
 
     $('#send').on('click',function(event){
