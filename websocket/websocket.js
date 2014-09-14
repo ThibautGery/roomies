@@ -19,6 +19,11 @@ io.sockets.on('connection', function (socket) {
     socket.on('join',function(name){
         debug('new person : '+ name);
         user.nickname = name;
+        socket.broadcast.emit('newUser',
+            {
+                nickname : user.nickname,
+                color: user.color
+            });
     });
 
     socket.on('message',function(data){

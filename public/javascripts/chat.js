@@ -16,6 +16,10 @@ $(document).ready(function(){
        console.log('data : '+ data);
         $('#history').append('<span style="color: '+data.color+'">' + data.nickname +'</span> -> '+ data.msg +"<br/>");
     });
+    server.on('newUser', function(data){
+        console.log('data : '+ data);
+        $('#history').append('<span style="color: '+data.color+'">' + data.nickname +'</span> just joined...<br/>');
+    });
 
     $('#send').on('click',function(event){
         var input = getInputValue();
