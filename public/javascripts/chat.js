@@ -26,6 +26,11 @@ $(document).ready(function(){
         $('#users').append('<li class="list-group-item" id="'+data.id+'" style="color: '+data.color+'">'+data.nickname+'</li>');
     });
 
+    server.on('oldUser', function(data){
+        console.log('data : '+ data);
+        $('#users').append('<li class="list-group-item" id="'+data.id+'" style="color: '+data.color+'">'+data.nickname+'</li>');
+    });
+
     server.on('userleft', function(data){
         console.log('data : '+ data);
         $('#history').append('<span style="color: '+data.color+'">' + data.nickname +'</span> just left...<br/>');
