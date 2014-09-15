@@ -15,6 +15,7 @@ io.sockets.on('connection', function (socket) {
     numOfUsers++;
     var user = map['user'+ numOfUsers] = {};
     user.color = color.random();
+    user.id = socket.id;
 
     socket.on('join',function(name){
         debug('new person : '+ name);
@@ -22,7 +23,18 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('newUser',
             {
                 nickname : user.nickname,
-                color: user.color
+                color: user.color,
+                id : user.id
+            });
+    });
+
+    socket.on('userleft',function(){
+        debug('userleft : '+ user.nickname);
+        socket.broadcast.emit('userleft',
+            {
+                id : user.id,
+                nickname : user.nickname,
+                color : user.color
             });
     });
 
