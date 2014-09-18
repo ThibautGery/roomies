@@ -19,11 +19,13 @@ io.sockets.on('connection', function (socket) {
     user.color = color.random();
     user.id = socket.id;
 
-    socket.on('join',function(name){
+    socket.on('join',function(name, room){
+        socket.join(room);
         debug('new person : '+ name);
         user.nickname = name;
+        user.room = room;
         redisClient.sadd('users',JSON.stringify(user));
-        socket.broadcast.emit('newUser',
+        socket.broadcast.in(room).emit('newUser',
             {
                 nickname : user.nickname,
                 color: user.color,
@@ -49,7 +51,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('userleft',function(){
         debug('userleft : '+ user.nickname);
         redisClient.srem('users',JSON.stringify(user));
-        socket.broadcast.emit('userleft',
+        socket.broadcast.in(user.room).emit('userleft',
             {
                 id : user.id,
                 nickname : user.nickname,
@@ -67,8 +69,7 @@ io.sockets.on('connection', function (socket) {
         redisClient.lpush('messages',JSON.stringify(msg),function(){
             redisClient.ltrim('msg',0, 100);
         });
-        io.emit('message', msg
-            , {for:'everyone'});
+        socket.broadcast.in(user.room).emit('message', msg);
 
     });
 });

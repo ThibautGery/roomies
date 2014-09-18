@@ -13,7 +13,7 @@ $(document).ready(function(){
 
     server.on('connect', function(data){
         var nickName = prompt('What is your nickname','anonymous');
-        server.emit('join', nickName);
+        server.emit('join', nickName,'default');
     });
 
     server.on('message', function(data){
@@ -41,6 +41,7 @@ $(document).ready(function(){
         var input = getInputValue();
         if(input ) {
             server.emit('message', input);
+            $('#history').append('<span style="color: red">me</span> -> '+ input +"<br/>");
         }
     });
 
