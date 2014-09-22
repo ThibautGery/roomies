@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+var chat = require('../controllers/chatController');
+
 /* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'The chat' });
-});
+router.get('/', chat);
 
 router.get('/about', function(req, res) {
     res.render('about', { title: 'About' });
@@ -13,6 +13,10 @@ router.get('/about', function(req, res) {
 
 router.get('/contact', function(req, res) {
     res.render('contact', { title: 'Contact' });
+});
+
+router.get('/chat/:id', function(req, res) {
+    res.render('chat', { title: 'Chat' });
 });
 
 

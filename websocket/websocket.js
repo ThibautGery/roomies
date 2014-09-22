@@ -12,6 +12,13 @@ var io = socket(server);
 var map = {};
 var numOfUsers = 0;
 
+redisClient.del('chats');
+redisClient.sadd('chats','default');
+redisClient.sadd('chats','general');
+redisClient.sadd('chats','NSFW');
+redisClient.sadd('chats','nice');
+redisClient.sadd('chats','map porn');
+
 io.sockets.on('connection', function (socket) {
     debug('client connected ! ');
     numOfUsers++;
@@ -24,7 +31,7 @@ io.sockets.on('connection', function (socket) {
         debug('new person : '+ name);
         user.nickname = name;
         user.room = room;
-        redisClient.sadd('users',JSON.stringify(user));
+        redisClient.sadd(room+'users',JSON.stringify(user));
         socket.broadcast.in(room).emit('newUser',
             {
                 nickname : user.nickname,
@@ -32,14 +39,14 @@ io.sockets.on('connection', function (socket) {
                 id : user.id
             });
 
-        redisClient.smembers('users',  function (err, users) {
+        redisClient.smembers(room+'users',  function (err, users) {
             users = users.reverse();
             users.forEach(function(user){
                 user = JSON.parse(user);
                 socket.emit("oldUser",user);
             });
         });
-        redisClient.lrange('messages', 0, -1, function (err, messages) {
+        redisClient.lrange(room+'messages', 0, -1, function (err, messages) {
             messages = messages.reverse();
             messages.forEach(function(message){
                 message = JSON.parse(message);
@@ -48,15 +55,16 @@ io.sockets.on('connection', function (socket) {
         });
     });
 
-    socket.on('userleft',function(){
-        debug('userleft : '+ user.nickname);
-        redisClient.srem('users',JSON.stringify(user));
+    socket.on('disconnect',function(){
+        debug('disconnect : '+ user.nickname);
+        redisClient.srem(user.room+'users',JSON.stringify(user));
         socket.broadcast.in(user.room).emit('userleft',
             {
                 id : user.id,
                 nickname : user.nickname,
                 color : user.color
             });
+        //TODO : if the user is the last, we must delete the room and the keys in redis associate with this room.
     });
 
     socket.on('message',function(data){
@@ -66,8 +74,8 @@ io.sockets.on('connection', function (socket) {
             nickname : user.nickname,
             color: user.color
         };
-        redisClient.lpush('messages',JSON.stringify(msg),function(){
-            redisClient.ltrim('msg',0, 100);
+        redisClient.lpush(user.room+'messages',JSON.stringify(msg),function(){
+            redisClient.ltrim(user.room+'messages',0, 100);
         });
         socket.broadcast.in(user.room).emit('message', msg);
 

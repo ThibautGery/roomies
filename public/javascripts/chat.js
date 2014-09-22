@@ -5,15 +5,17 @@ $(document).ready(function(){
         charInput.val('');
         return data;
     }
+    var getChatName = function(){
+        var pathname = window.location.pathname;
+        return pathname.split('/')[2];
+    };
+
     var server = io();
 
-    $(window).bind('beforeunload',function(){
-        server.emit('userleft');
-    });
 
     server.on('connect', function(data){
         var nickName = prompt('What is your nickname','anonymous');
-        server.emit('join', nickName,'default');
+        server.emit('join', nickName, getChatName());
     });
 
     server.on('message', function(data){

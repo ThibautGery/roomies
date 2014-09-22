@@ -16,8 +16,6 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
-
-
 </head>
 
 <body role="document">
@@ -36,26 +34,50 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ><a href="/">Home</a></li>
-                <li class="active"><a href="/about">About</a></li>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
 
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
+        <!--/.nav-collapse -->
     </div>
 </div>
 
 <div class="container theme-showcase" role="main">
 
-    <h1>Chats</h1>
-    <p>The différent chat are here</p>
-    <ul  class="list-group">
-        <% chats.forEach(function(el, index) { %>
-            <li class="list-group-item"><a href="chat/<%= encodeURI(el) %>"> <%= el %> </a> </li>
-        <%});
-        %>
-    </ul>
+    <div class="row">
 
+
+        <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Chat</h3>
+                    </div>
+                    <div class="panel-body" id="history">
+
+                    </div>
+                </div>
+                <input class="form-control" type="text" name="chatInput" id="chatInput"/>
+                <button type="button" class="btn btn-lg btn-default" id="send">Send !</button>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default" id="side">
+                <div class="panel-heading">
+                    <h3 class="panel-title">users</h3>
+                </div>
+                <ul id="users" class="list-group">
+
+                </ul>
+            </div>
+        </div>
     </div>
+
+</div>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/chat.js"></script>
+
 </body>
 </html>
