@@ -12,12 +12,13 @@ var io = socket(server);
 var map = {};
 var numOfUsers = 0;
 
-redisClient.del('chats');
-redisClient.sadd('chats','default');
-redisClient.sadd('chats','general');
-redisClient.sadd('chats','NSFW');
-redisClient.sadd('chats','nice');
-redisClient.sadd('chats','map porn');
+redisClient.sismember('chats','default', function(err, value) {
+    if (!value) {
+        redisClient.sadd('chats', 'default');
+    }
+});
+
+
 
 io.sockets.on('connection', function (socket) {
     debug('client connected ! ');
