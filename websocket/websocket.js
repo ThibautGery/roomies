@@ -23,14 +23,18 @@ io.sockets.on('connection', function (socket) {
     debug('client connected ! ');
     numOfUsers++;
     var user = map['user'+ numOfUsers] = {};
-    user.color = color.random();
     user.id = socket.id;
 
-    socket.on('join',function(name, room){
+    socket.on('join',function(name, room, color){
         socket.join(room);
         debug('new person : '+ name);
         user.nickname = name;
         user.room = room;
+        if(color === undefined || color === null) {
+            //user.color = color.random();
+        }else{
+            user.color = color;
+        }
         redisClient.sadd(room+'users',JSON.stringify(user));
         socket.broadcast.in(room).emit('newUser',
             {

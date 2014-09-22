@@ -10,12 +10,23 @@ $(document).ready(function(){
         return pathname.split('/')[2];
     };
 
-    var server = io();
+    var getRandomColor = function () {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
 
+
+    var server = io();
+    var user = {};
 
     server.on('connect', function(data){
-        var nickName = prompt('What is your nickname','anonymous');
-        server.emit('join', nickName, getChatName());
+        user.nickName = prompt('What is your nickname','anonymous');
+        user.color = getRandomColor();
+        server.emit('join', user.nickName, getChatName(), user.color);
     });
 
     server.on('message', function(data){
@@ -43,7 +54,7 @@ $(document).ready(function(){
         var input = getInputValue();
         if(input ) {
             server.emit('message', input);
-            $('#history').append('<span style="color: red">me</span> -> '+ input +"<br/>");
+            $('#history').append('<span style="color: '+user.color+'">'+user.nickName+'</span> -> '+ input +"<br/>");
         }
     });
 
