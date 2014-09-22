@@ -21,10 +21,10 @@ $(document).ready(function(){
 
 
     var server = io();
-    var user = {};
+    var user = { };
 
     server.on('connect', function(data){
-        user.nickName = prompt('What is your nickname','anonymous');
+        user.nickName = prompt('What is your nickname','anonymous') || 'anonymous';
         user.color = getRandomColor();
         server.emit('join', user.nickName, getChatName(), user.color);
     });
@@ -48,6 +48,11 @@ $(document).ready(function(){
         console.log('data : '+ data);
         $('#history').append('<span style="color: '+data.color+'">' + data.nickname +'</span> just left...<br/>');
         $('#'+data.id).remove();
+    });
+
+    server.on('roomNotExisting', function(data){
+        console.log('roomNotExisting : '+ data);
+        alert("This chat doesn't exist " +data);
     });
 
     $('#send').on('click',function(event){
