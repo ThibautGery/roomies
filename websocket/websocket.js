@@ -31,7 +31,7 @@ io.sockets.on('connection', function (socket) {
         user.nickname = name;
         user.room = room;
         if(color === undefined || color === null) {
-            //user.color = color.random();
+            user.color = color.random();
         }else{
             user.color = color;
         }

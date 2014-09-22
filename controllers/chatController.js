@@ -2,7 +2,7 @@ var redis = require('redis');
 var redisClient = redis.createClient();
 
 
-var controller =  function(req, res) {
+var getAll =  function(req, res) {
     redisClient.smembers('chats', function (err, chats) {
             chats = chats.reverse();
             res.render('index', { title: 'Find your chat' , chats : chats });
@@ -10,5 +10,16 @@ var controller =  function(req, res) {
 
 };
 
+var get = function(req, res) {
+    res.render('chat', { title: 'Chat' });
+};
 
-module.exports = controller;
+var add = function(req, res) {
+    var name = req.body.name;
+    redisClient.sadd('chats',name);
+    res.redirect('/chat/'+name);
+};
+
+module.exports.getAll = getAll;
+module.exports.get = get;
+module.exports.add = add;

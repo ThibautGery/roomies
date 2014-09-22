@@ -47,7 +47,7 @@
 
 <div class="container theme-showcase" role="main">
 
-    <h1>Chats</h1>
+    <h2>Chats</h2>
     <p>The différent chat are here</p>
     <ul  class="list-group">
         <% chats.forEach(function(el, index) { %>
@@ -57,5 +57,15 @@
     </ul>
 
     </div>
+
+<div class="container theme-showcase" role="main">
+    <h2>Create</h2>
+    <p>Can't find one chat, create yours !</p>
+    <form method="post" action="/chat">
+        <label>Name : </label> <input type="text" name="name" id="name">
+        <button type="submit" class="btn btn-sm btn-default">Create</button>
+    </form>
+
+</div>
 </body>
 </html>
