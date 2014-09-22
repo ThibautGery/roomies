@@ -57,14 +57,20 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect',function(){
         debug('disconnect : '+ user.nickname);
-        redisClient.srem(user.room+'users',JSON.stringify(user));
-        socket.broadcast.in(user.room).emit('userleft',
-            {
-                id : user.id,
-                nickname : user.nickname,
-                color : user.color
+        redisClient.srem(user.room+'users',JSON.stringify(user), function(err){
+            socket.broadcast.in(user.room).emit('userleft',
+                {
+                    id : user.id,
+                    nickname : user.nickname,
+                    color : user.color
+                });
+
+            redisClient.scard(user.room+'users', function(err, value){
+                if(value=== 0 && user.room != 'default') {
+                    redisClient.srem('chats', user.room);
+                }
             });
-        //TODO : if the user is the last, we must delete the room and the keys in redis associate with this room.
+        });
     });
 
     socket.on('message',function(data){
