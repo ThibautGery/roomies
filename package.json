@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "istanbul cover --print detail _mocha -- -R spec test"
   },
   "dependencies": {
     "express": "~4.9.0",
@@ -16,5 +17,11 @@
     "socket.io": "~1.1.0",
     "socket.io-client": "~1.1.0",
     "redis": "~0.12.1"
+  },
+  "devDependencies": {
+      "chai": "*",
+      "mocha": "*",
+      "sinon" : "*",
+      "istanbul" : "*"
   }
 }
