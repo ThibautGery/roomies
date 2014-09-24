@@ -2,9 +2,8 @@ var debug = require('debug')('chat2');
 var http = require('http');
 var socket = require('socket.io');
 var app = require('../app');
-var color = require('../service/color');
-var redis = require('redis');
-var redisClient = redis.createClient();
+var colorS = require('../service/color');
+var redisClient =require('../persistence/redis');
 
 var server = http.Server(app);
 var io = socket(server);
@@ -22,6 +21,7 @@ redisClient.sismember('chats','default', function(err, value) {
 
 io.sockets.on('connection', function (socket) {
     debug('client connected ! ');
+    //TODO : à mettre dans redis
     numOfUsers++;
     var user = map['user'+ numOfUsers] = {};
     user.id = socket.id;
@@ -37,7 +37,7 @@ io.sockets.on('connection', function (socket) {
                 user.nickname = name || 'anonymous';
                 user.room = room;
                 if(color === undefined || color === null) {
-                    user.color = color.random();
+                    user.color = colorS.random();
                 }else{
                     user.color = color;
                 }

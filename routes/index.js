@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
+var redis = require('../persistence/redis');
 var chat = require('../controllers/chatController');
+
+chat = new chat(redis);
 
 /* GET home page. */
 router.get('/', chat.getAll);
