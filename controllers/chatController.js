@@ -11,7 +11,7 @@ var ChatController = function (redisClient) {
             if(errorMessage == false || errorMessage === null || errorMessage === undefined)
                 res.render('index', { title: 'Find your chat', chats: chats, errorMessage : null });
             else
-                res.render('index', { title: 'Find your chat', chats: chats, errorMessage : decodeURI(errorMessage)});
+                res.status(412).render('index', { title: 'Find your chat', chats: chats, errorMessage : decodeURI(errorMessage)});
         });
     };
 
@@ -23,7 +23,7 @@ var ChatController = function (redisClient) {
         var name = req.body.name;
         if (name == false || name === null || name === undefined) {
             var msg = "The name must be not empty";
-            res.redirect('/?error='+(msg));
+            res.redirect('/?error='+msg);
         }else{
 
             redisClient.sadd('chats', name);
