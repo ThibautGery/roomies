@@ -1,12 +1,9 @@
 var server = require('../websocket/websocket'),
     request = require('supertest');
 
-var done = function(err, res){
-    if (err) throw err;
-};
 
 describe('Http chat', function(){
-    describe('GET /', function(){
+    describe('GET /', function(done){
         it('GET /', function(){
             request(server)
                 .get('/')
@@ -21,7 +18,7 @@ describe('Http chat', function(){
     });
 
     describe('POST /chat', function(){
-        it('POST /chat', function(){
+        it('POST /chat', function(done){
             request(server)
                 .post('/chat')
                 .send({ name: 'azertyutrfdgthyuj' })
@@ -30,7 +27,7 @@ describe('Http chat', function(){
     });
 
     describe('GET /chat', function(){
-        it('GET /chat', function(){
+        it('GET /chat', function(done){
             request(server)
                 .get('/chat/toto')
                 .expect(200, done);
