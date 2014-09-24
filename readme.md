@@ -11,7 +11,7 @@ Installation
 
 You will need to install [npm](https://www.npmjs.org/) and [redis](http://redis.io) in order to make this works.
 
-Just run `npm install` to install all the dependencies then run the app with `node run bin/www`
+Just run `npm install` to install all the dependencies then run the app with `npm start`
 
 
 Goal
