@@ -1,4 +1,3 @@
-var redis = require('../persistence/redis');
 
 
 var ChatController = function (redisClient) {

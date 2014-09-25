@@ -1,14 +1,24 @@
-var serverRequire = require('../websocket/websocket'),
-    io = require('socket.io-client');
+var websocket = require('../websocket/websocket'),
+    io = require('socket.io-client'),
+    http = require('http'),
+    sinon = require("sinon"),
+    redisReq =require('../persistence/redis'),
+     redisClient = require('../persistence/redis');
 
 
 describe('Websocket chat', function(){
 
-    var socket;
+    var socketClient;
+    var socketServer;
 
-    var server = serverRequire;
+    var server;
+    var redis = {};
 
     before(function(done) {
+        redis.sismember = sinon.spy();
+        socketServer = new websocket(redis, http.createServer());
+        server = socketServer.server;
+
         console.log('server starting...');
         server.listen(3001, function(){
             console.log('server started...');
@@ -21,37 +31,28 @@ describe('Websocket chat', function(){
 
     });
 
-    after(function() {
-        console.log('server closing...');
-        server.close(function(){
-            console.log('server closed...');
-        });
-
-    });
-
-
     beforeEach(function(done) {
         // Setup
         var url = server.address();
-        socket = io.connect('http://'+url.address +':'+url.port, {
+        socketClient = io.connect('http://'+url.address +':'+url.port, {
             'reconnection delay' : 0
             , 'reopen delay' : 0
             , 'force new connection' : true
         });
-        socket.on('connect', function() {
+        socketClient.on('connect', function() {
             console.log('connected...');
             done();
         });
-        socket.on('disconnect', function() {
+        socketClient.on('disconnect', function() {
             console.log('disconnected...');
         })
     });
 
     afterEach(function(done) {
         // Cleanup
-        if(socket.connected) {
+        if(socketClient.connected) {
             console.log('WS disconnecting...');
-            socket.disconnect();
+            socketClient.disconnect();
         } else {
             // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
             console.log('WS : no connection to break...');
@@ -62,7 +63,8 @@ describe('Websocket chat', function(){
 
 
         it(' should join correctely', function(done){
-            socket.emit('join', 'userName', 'chatName', '#000000');
+
+            socketClient.emit('join', 'userName', 'chatName', '#000000');
             done();
         });
 

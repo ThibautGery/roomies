@@ -1,4 +1,4 @@
-var server = require('../websocket/websocket'),
+var server = require('../app'),
     request = require('supertest');
 
 
