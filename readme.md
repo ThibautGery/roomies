@@ -1,6 +1,8 @@
 Roomies
 =======
 
+[![Build Status](https://travis-ci.org/ThibautGery/roomies.svg?branch=master)](https://travis-ci.org/ThibautGery/roomies)
+
 Description
 -----------
 
